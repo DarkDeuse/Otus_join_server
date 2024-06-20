@@ -1,17 +1,10 @@
 #include <iostream>
-#include <stdlib.h>     //for using the function sleep
+#include <stdlib.h> 
 
-#include "../libs/Server.h"
+#include "libs/Server.h"
 
-int main(/*int argc, char const *argv[]*/){
+int main(){
 
-
-  /*if(argc != 2) {
-    std::cerr << "Wrong number of arguments (expected 2). Usage: bulk_server <port> \n" << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  auto port = std::strtoll(argv[1], nullptr, 0);*/
   auto port = 9000;
   if((port <= 0) || (port > 65535)) {
     std::cerr << "Port must be an integer between 0 and 65535.\n";

@@ -1,10 +1,27 @@
-cmake_minimum_required (VERSION 3.2)
+cmake_minimum_required(VERSION 3.2) 
 
-if (DEFINED ENV{TRAVIS_BUILD_NUMBER})
-	project(join_server VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
+set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
+set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+
+project(join_server VERSION ${PROJECT_VESRION})
+add_executable(join_server main.cpp)
+set_target_properties(join_server PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQIRED ON)
+target_link_libraries(join_server PRIVATE pthread boost_system clientServer joinServerLib)
+add_subdirectory (${PROJECT_SOURCE_DIR}/libs)
+if(MSVC)
+	target_compile_options(join_server PRIVATE /W4)
 else()
-	project(join_server VERSION 99.99.999)
+	target_compile_options(join_server PRIVATE -Wall -Wextra -Werror)
 endif()
 
-add_subdirectory (${PROJECT_SOURCE_DIR}/libs)
-add_subdirectory (${PROJECT_SOURCE_DIR}/src)
+install(TARGETS join_server RUNTIME DESTINATION bin)
+
+set(CPACK_GENERATOR DEB)
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+
+set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+
+include(CPack)
+
